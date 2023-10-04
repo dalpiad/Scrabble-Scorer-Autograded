@@ -33,26 +33,63 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-   console.log("Let's play some scrabble! Enter a word:");
+   return input.question("Let's play some scrabble!\nEnter a word: ");
 };
 
-let simpleScorer;
+function scorerSimple(word) {
+   let simpleScore = 0;
+	return simpleScore + word.length;
+};
 
-let vowelBonusScorer;
+function scorerVowelBonus(word) {
+   word = word.toUpperCase();
+   let vowelBonusScore = 0;
 
-let scrabbleScorer;
+	for (let i = 0; i < word.length; i++) {
+      if (word[i] == "A" || word[i] == "E" || word[i] == "I" || word[i] == "O" || word[i] == "U") {
+         vowelBonusScore += 3;
+      } else {
+         vowelBonusScore += 1;         
+      }
+   };
+   return vowelBonusScore;
+};
 
-const scoringAlgorithms = [];
+let simpleScorer = {
+   name: "Simple Score",
+   description: "Each letter is worth 1 point.", 
+   scoringFunction: scorerSimple
+};
 
-function scorerPrompt() {}
+let vowelBonusScorer = {
+   name: "Bonus Vowels",
+   description: "Vowels are 3 pts, consonants are 1 pt.", 
+   scoringFunction: scorerVowelBonus
+};
+
+let scrabbleScorer = {
+   name: "Scrabble",
+   description: "The traditional scoring algorithm.", 
+   scoringFunction: oldScrabbleScorer
+};
+
+let scoringArrayFunctions = [scorerSimple, scorerVowelBonus, oldScrabbleScorer];
+
+const scoringAlgorithms = [simpleScorer, vowelBonusScorer, scrabbleScorer];
+
+function scorerPrompt() {};
 
 function transform() {};
 
 let newPointStructure;
 
 function runProgram() {
-   initialPrompt();
-   
+   console.log(oldScrabbleScorer(initialPrompt()));
+   scorerPrompt(input.question(`Which scoring algorithm would you like to use? \n 
+0 - ${scoringAlgorithms[0].name}: ${scoringAlgorithms[0].description}
+1 - ${scoringAlgorithms[1].name}: ${scoringAlgorithms[1].description}
+2 - ${scoringAlgorithms[2].name}: ${scoringAlgorithms[2].description}
+Enter 0, 1, or 2: `))
 }
 
 // Don't write any code below this line //
